@@ -1,149 +1,125 @@
 "use strict";
-let scorePlayer1 = document.querySelector(".score.left");
-let scorePlayer2 = document.querySelector(".score.right");
-let currentNumber1 = document.querySelector(".current.left .current-number");
-let currentNumber2 = document.querySelector(".current.right .current-number");
+let score = document.querySelectorAll(".score");
+let currentNumber = document.querySelectorAll(".current-number");
 let dice = document.querySelector("#dice");
-//
-//TEST
-let testScore = document.querySelector(".test-score");
-let testCurrent = document.querySelector(".test-current");
+let rollDiceBtn = document.querySelector("#roll-dice");
+let holdBtn = document.querySelector("#hold");
+let newGameBtn = document.querySelector("#new-game");
+let selected = "rgba(255, 255, 255, 0.6)";
+let unSelected = "rgba(255, 255, 255, 0.2)";
+let currentPlayer = document.querySelector(".current-player");
+let players = document.querySelectorAll(".player");
 //
 //
 // TEST FUNCTIONS
-//
-//
-//
-function diceView(x) {
-  switch (x) {
-    case 0:
-      dice.style.visibility = "hidden";
-      document.querySelector("#dot1").style.visibility = "hidden";
-      document.querySelector("#dot2").style.visibility = "hidden";
-      document.querySelector("#dot3").style.visibility = "hidden";
-      document.querySelector("#dot4").style.visibility = "hidden";
-      document.querySelector("#dot5").style.visibility = "hidden";
-      document.querySelector("#dot6").style.visibility = "hidden";
-      document.querySelector("#dot7").style.visibility = "hidden";
-      break;
+
+function diceView(numberOnDice) {
+  dice.style.visibility = "hidden";
+  let dots = document.querySelectorAll(".dot");
+  for (let i = 0; i < dots.length; i++) dots[i].style.visibility = "hidden";
+  function showDots(array) {
+    dice.style.visibility = "visible";
+    for (let i = 0; i < array.length; i++)
+      dots[array[i]].style.visibility = "visible";
+  }
+  switch (numberOnDice) {
     case 1:
-      dice.style.visibility = "visible";
-      document.querySelector("#dot1").style.visibility = "hidden";
-      document.querySelector("#dot2").style.visibility = "hidden";
-      document.querySelector("#dot3").style.visibility = "hidden";
-      document.querySelector("#dot4").style.visibility = "hidden";
-      document.querySelector("#dot5").style.visibility = "hidden";
-      document.querySelector("#dot6").style.visibility = "hidden";
-      document.querySelector("#dot7").style.visibility = "visible";
+      showDots([6]);
       break;
     case 2:
-      dice.style.visibility = "visible";
-      document.querySelector("#dot1").style.visibility = "visible";
-      document.querySelector("#dot2").style.visibility = "hidden";
-      document.querySelector("#dot3").style.visibility = "hidden";
-      document.querySelector("#dot4").style.visibility = "hidden";
-      document.querySelector("#dot5").style.visibility = "hidden";
-      document.querySelector("#dot6").style.visibility = "visible";
-      document.querySelector("#dot7").style.visibility = "hidden";
+      showDots([0, 5]);
       break;
     case 3:
-      dice.style.visibility = "visible";
-      document.querySelector("#dot1").style.visibility = "hidden";
-      document.querySelector("#dot2").style.visibility = "hidden";
-      document.querySelector("#dot3").style.visibility = "visible";
-      document.querySelector("#dot4").style.visibility = "visible";
-      document.querySelector("#dot5").style.visibility = "hidden";
-      document.querySelector("#dot6").style.visibility = "hidden";
-      document.querySelector("#dot7").style.visibility = "visible";
+      showDots([2, 3, 6]);
       break;
     case 4:
-      dice.style.visibility = "visible";
-      document.querySelector("#dot1").style.visibility = "visible";
-      document.querySelector("#dot2").style.visibility = "hidden";
-      document.querySelector("#dot3").style.visibility = "visible";
-      document.querySelector("#dot4").style.visibility = "visible";
-      document.querySelector("#dot5").style.visibility = "hidden";
-      document.querySelector("#dot6").style.visibility = "visible";
-      document.querySelector("#dot7").style.visibility = "hidden";
+      showDots([0, 2, 3, 5]);
       break;
     case 5:
-      dice.style.visibility = "visible";
-      document.querySelector("#dot1").style.visibility = "visible";
-      document.querySelector("#dot2").style.visibility = "hidden";
-      document.querySelector("#dot3").style.visibility = "visible";
-      document.querySelector("#dot4").style.visibility = "visible";
-      document.querySelector("#dot5").style.visibility = "hidden";
-      document.querySelector("#dot6").style.visibility = "visible";
-      document.querySelector("#dot7").style.visibility = "visible";
+      showDots([0, 2, 3, 5, 6]);
       break;
     case 6:
-      dice.style.visibility = "visible";
-      document.querySelector("#dot1").style.visibility = "visible";
-      document.querySelector("#dot2").style.visibility = "visible";
-      document.querySelector("#dot3").style.visibility = "visible";
-      document.querySelector("#dot4").style.visibility = "visible";
-      document.querySelector("#dot5").style.visibility = "visible";
-      document.querySelector("#dot6").style.visibility = "visible";
-      document.querySelector("#dot7").style.visibility = "hidden";
+      showDots([0, 1, 2, 3, 4, 5]);
       break;
   }
 }
 
-document.querySelector("#test").addEventListener("click", function () {
-  let number = Math.trunc(Math.random() * 6 + 1);
-  console.log(number);
-  diceView(number);
-});
-
-let test = function () {
-  scorePlayer1.textContent = 23;
-  scorePlayer2.textContent = 4;
-  currentNumber1.textContent = 5;
-  currentNumber2.textContent = 6;
-};
-
-document.querySelector("#test-data").addEventListener("click", test);
-
-//
-//
-//
-// THE GAME
-//
-//
-//
 let startGame = function () {
-  scorePlayer1.textContent = 0;
-  scorePlayer2.textContent = 0;
-  currentNumber1.textContent = 0;
-  currentNumber2.textContent = 0;
+  score[0].textContent = 0;
+  score[1].textContent = 0;
+  currentNumber[0].textContent = 0;
+  currentNumber[1].textContent = 0;
   dice.value = 0;
-  testScore.textContent = 0;
-  testCurrent.textContent = 0;
-};
-startGame();
-let rollDice = function () {
-  return Math.trunc(Math.random() * 6 + 1);
+  diceView(0);
 };
 
 // start new game
-document.querySelector("#new-game").addEventListener("click", startGame);
+newGameBtn.addEventListener("click", function () {
+  startGame();
+  let activePlayer = defineActivePlayer();
+  activePlayer.style.backgroundColor = selected;
+});
 // roll the dice
-document.querySelector("#roll-dice").addEventListener("click", function () {
+function defineActivePlayer() {
+  let turn = currentPlayer.textContent;
+  let activePlayer = players[turn];
+  return activePlayer;
+}
+function newActivePlayer() {
+  Number(currentPlayer.textContent) !== 0
+    ? (currentPlayer.textContent = 0)
+    : (currentPlayer.textContent = 1);
+  holdBtn.disabled = true;
+  holdBtn.style = unSelected;
+}
+
+rollDiceBtn.addEventListener("click", function () {
+  let activePlayer = defineActivePlayer();
   let number = Math.trunc(Math.random() * 6 + 1);
   console.log(number);
   dice.value = number;
+  diceView(number);
   if (number != 1) {
-    testCurrent.textContent = Number(testCurrent.textContent) + number;
+    activePlayer.querySelector(".current-number").textContent =
+      Number(activePlayer.querySelector(".current-number").textContent) +
+      number;
+    holdBtn.disabled = false;
+    holdBtn.style = selected;
   } else {
-    testCurrent.textContent = 0;
+    activePlayer.querySelector(".current-number").textContent = 0;
+    newActivePlayer();
+    activePlayer.style.backgroundColor = unSelected;
+    players[currentPlayer.textContent].style.backgroundColor = selected;
   }
 });
+
 // hold
-document.querySelector("#hold").addEventListener("click", function () {
-  let currentScore = Number(testCurrent.textContent);
-  if (currentScore != 0) {
-    testScore.textContent = Number(testScore.textContent) + currentScore;
+function youWin(winner) {
+  winner.style.backgroundColor = "rgba(0, 255, 250, 0.6)";
+  winner.style.color = "rgba(255, 255, 255)";
+  rollDiceBtn.disabled = true;
+  rollDiceBtn.style = unSelected;
+  holdBtn.disabled = true;
+  holdBtn.style = unSelected;
+  document.querySelector(".winner").textContent = `${
+    winner.querySelector(".name").textContent
+  } wins!`;
+}
+
+holdBtn.addEventListener("click", function () {
+  let activePlayer = defineActivePlayer();
+  let currentScore = Number(
+    activePlayer.querySelector(".current-number").textContent
+  );
+  let totalScore = Number(activePlayer.querySelector(".score").textContent);
+  activePlayer.querySelector(".score").textContent = totalScore + currentScore;
+  activePlayer.querySelector(".current-number").textContent = 0;
+  console.log(activePlayer.querySelector(".score").textContent);
+  if (Number(activePlayer.querySelector(".score").textContent) >= 100) {
+    youWin(activePlayer);
   } else {
-    testScore.textContent = 0;
+    newActivePlayer();
+    activePlayer.style.backgroundColor = unSelected;
+    players[currentPlayer.textContent].style.backgroundColor = selected;
   }
 });

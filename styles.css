@@ -6,9 +6,8 @@ html {
   position: absolute;
   width: 700px;
   height: 500px;
-  background-color: white, 0.2;
+  background-color: rgb(255, 255, 255, 0.1);
   border-radius: 5px;
-  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -24,12 +23,12 @@ html {
 .player1 {
   position: absolute;
   left: 0px;
-  background-color: rgb(255, 255, 255, 0.3);
+  background-color: rgb(255, 255, 255, 0.2);
 }
 .player2 {
   position: absolute;
   right: 0px;
-  background-color: rgb(255, 255, 255, 0.4);
+  background-color: rgb(255, 255, 255, 0.2);
 }
 .buttons-panel {
   position: absolute;
@@ -131,38 +130,38 @@ button {
 }
 #dot1 {
   position: absolute;
-  top: 5%;
-  left: 5%;
+  top: 10%;
+  left: 10%;
   visibility: hidden;
 }
 #dot2 {
   position: absolute;
-  top: 5%;
+  top: 10%;
   left: 50%;
   transform: translate(-50%);
   visibility: hidden;
 }
 #dot3 {
   position: absolute;
-  top: 5%;
-  right: 5%;
+  top: 10%;
+  right: 10%;
   visibility: hidden;
 }
 #dot4 {
   position: absolute;
-  bottom: 5%;
-  left: 5%;
+  bottom: 10%;
+  left: 10%;
   visibility: hidden;
 }
 #dot6 {
   position: absolute;
-  bottom: 5%;
-  right: 5%;
+  bottom: 10%;
+  right: 10%;
   visibility: hidden;
 }
 #dot5 {
   position: absolute;
-  bottom: 5%;
+  bottom: 10%;
   left: 50%;
   transform: translate(-50%);
   visibility: hidden;
@@ -170,22 +169,16 @@ button {
 #dot7 {
   visibility: hidden;
 }
-.test {
-  position: absolute;
-  top: 5%;
-  width: 200px;
-  height: 30px;
-  font-size: 24px;
+
+.winner {
+  right: 50%;
+  margin-top: 5%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 40px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
 }
-#test-data {
-  left: 250px;
-}
-#test {
-  left: 500px;
-}
-#test-score {
-  left: 750px;
-}
-#test-current {
-  left: 1000px;
+.current-player {
+  visibility: hidden;
 }
